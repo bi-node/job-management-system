@@ -1,2 +1,4 @@
-package jobmanagement.entity;public class JobApplication {
+package jobmanagement.entity;
+
+public class JobApplication {
 }
