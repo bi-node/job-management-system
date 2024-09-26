@@ -1,0 +1,24 @@
+### Upload a Job with a File
+
+POST http://localhost:8080/api/v1/jobs/add-job
+Content-Type: multipart/form-data; boundary=myBoundary123
+
+--myBoundary123
+Content-Disposition: form-data; name="job"
+
+{
+    "jobIdNo": "12345",
+    "title": "Software Engineer",
+    "companyName": "Tech Innovations",
+    "address": "123 Tech Street",
+    "email": "hr@techinnovations.com",
+    "hiringManager": "John Doe",
+    "hiringManagerPhoneNumber": "123-456-7890"
+}
+
+--myBoundary123
+Content-Disposition: form-data; name="jdfile"; filename="job_description.txt"
+Content-Type: text/plain
+
+This is the job description content.
+--myBoundary123--

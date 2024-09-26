@@ -1,7 +1,10 @@
 package jobmanagement.service;
 
 import jakarta.transaction.Transactional;
+import jobmanagement.adapters.JobAdapter;
 import jobmanagement.entity.Job;
+import jobmanagement.entity.JobResponse;
+import jobmanagement.entity.StorageData;
 import jobmanagement.repository.JobRepository;
 import jobmanagement.repository.StorageDataRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +32,17 @@ public class JobService {
     @Autowired
     private StorageDataService storageDataService;
 
-    public List<Job> findAll() {
-        return jobRepository.findAll();
+
+
+    public List<JobResponse> findAll() throws IOException {
+        List<Job> jobs = jobRepository.findAll();
+        List<JobResponse> jobResponses=new ArrayList<>();
+
+        for(Job job:jobs){
+            jobResponses.add(JobAdapter.JobToJobResponse(job));
+        }
+        return jobResponses;
+
     }
 
     public Job findById(int id) {
@@ -41,15 +54,14 @@ public class JobService {
     }
 
     public Job saveJob(Job job, MultipartFile file) throws IOException {
-        try {
-            storageDataService.uploadImageToFileSystem(file);
-        }
-        catch (Exception e) {
-            throw new IOException(e.getMessage());
-        }
-            return jobRepository.save(job);
+        // Handle the file upload and retrieve the storage data
+        StorageData storageData = storageDataService.uploadFile(file);
 
+        // Associate the file information with the job
+        job.setJobDescription(storageData);
+        return jobRepository.save(job);
     }
+
 
     public void deleteJob(int id) {
         jobRepository.deleteById(id);

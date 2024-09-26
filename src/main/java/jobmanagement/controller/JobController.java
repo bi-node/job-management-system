@@ -1,5 +1,6 @@
 package jobmanagement.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jobmanagement.entity.Job;
 import jobmanagement.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +21,24 @@ public class JobController {
     @Autowired
     private JobService jobService;
 
-    @PostMapping
+    @PostMapping("/add-job")
     public ResponseEntity<?> addJob(
-            @RequestPart("job") Job job, // Job object in JSON format
-            @RequestPart("jdfile") MultipartFile jdFile // File as a part of the request
+            @RequestParam("job") String jobJson,  // JSON string for Job
+            @RequestParam("jdfile") MultipartFile jdFile // File upload
     ) throws IOException {
+        // Convert the JSON string to a Job object
+        ObjectMapper objectMapper = new ObjectMapper();
+        Job job = objectMapper.readValue(jobJson, Job.class);
+
+        // Save the job and file
         Job newJob = jobService.saveJob(job, jdFile);
-        return ResponseEntity.status(HttpStatus.OK).body(newJob);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newJob);
     }
 
 
+
     @GetMapping
-    public ResponseEntity<?> getAllJobs() {
+    public ResponseEntity<?> getAllJobs() throws IOException {
         return ResponseEntity.status(HttpStatus.OK).body(jobService.findAll());
     }
 

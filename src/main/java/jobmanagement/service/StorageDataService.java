@@ -18,7 +18,7 @@ public class StorageDataService {
 
 
     @Autowired
-    private StorageDataRepository fileDataRepository;
+    private StorageDataRepository storageDataRepository;
 
 //    private final String FOLDER_PATH="/Users/javatechie/Desktop/MyFIles/";
 
@@ -26,25 +26,42 @@ public class StorageDataService {
 
 
 
-    public String uploadImageToFileSystem(MultipartFile file) throws IOException {
-        String filePath=FOLDER_PATH+file.getOriginalFilename();
+    public StorageData uploadFile(MultipartFile file) throws IOException {
+        // Check if the file is empty
+        if (file.isEmpty()) {
+            throw new IOException("File is empty");
+        }
 
-        StorageData fileData=fileDataRepository.save(StorageData.builder()
-                .name(file.getOriginalFilename())
-                .type(file.getContentType())
-                .filePath(filePath).build());
-
+        // Build file path and save the file
+        String filePath = FOLDER_PATH + file.getOriginalFilename();
         file.transferTo(new File(filePath));
 
-        return "file uploaded successfully : " + filePath;
+        // Create StorageData object and save it
+        StorageData storageData = StorageData.builder()
+                .name(file.getOriginalFilename())
+                .type(file.getContentType())
+                .filePath(filePath)
+                .build();
+
+        return storageDataRepository.save(storageData);
     }
 
-    public byte[] downloadImageFromFileSystem(String fileName) throws IOException {
-        Optional<StorageData> fileData = fileDataRepository.findByName(fileName);
+
+    public byte[] downloadFile(String fileName) throws IOException {
+        Optional<StorageData> fileData = storageDataRepository.findByName(fileName);
+        String filePath=fileData.get().getFilePath();
+        return Files.readAllBytes(new File(filePath).toPath());
+    }
+
+    public byte[] downloadFileById(int id) throws IOException {
+        Optional<StorageData> fileData = storageDataRepository.findById(id);
         String filePath=fileData.get().getFilePath();
         return Files.readAllBytes(new File(filePath).toPath());
     }
 
 
+    public StorageData getById(int id) {
+        return storageDataRepository.findById(id).orElseThrow();
+    }
 
 }

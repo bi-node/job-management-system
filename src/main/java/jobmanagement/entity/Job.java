@@ -26,13 +26,11 @@ public class Job {
 
     private String address;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    StorageData jobDescription;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) // Ensures jobDescription is automatically saved with Job
+    @JoinColumn(name = "job_description_id") // Link to StorageData entity
+    private StorageData jobDescription;
 
     private String email;
     private String hiringManager;
     private String hiringManagerPhoneNumber;
-
-
-
 }

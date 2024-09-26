@@ -1,6 +1,7 @@
 package jobmanagement.repository;
 
 import jobmanagement.entity.Job;
+import jobmanagement.entity.JobResponse;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
