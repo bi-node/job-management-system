@@ -15,8 +15,4 @@ import java.util.List;
 @Repository
 public interface JobRepository extends JpaRepository<Job, Integer> {
 
-
-    Page<Job> findAllByTitleContainingIgnoreCase(String title, Pageable pageable);
-
-
 }

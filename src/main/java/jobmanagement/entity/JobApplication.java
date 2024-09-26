@@ -17,6 +17,7 @@ public class JobApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @OneToOne
+    @JoinColumn(name = "job_id")
     private Job job;
 
     @Temporal(TemporalType.DATE)

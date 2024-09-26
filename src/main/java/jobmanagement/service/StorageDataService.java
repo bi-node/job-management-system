@@ -55,7 +55,12 @@ public class StorageDataService {
 
     public byte[] downloadFileById(int id) throws IOException {
         Optional<StorageData> fileData = storageDataRepository.findById(id);
-        String filePath=fileData.get().getFilePath();
+        String filePath;
+        if (fileData.isPresent()) {
+            filePath = fileData.get().getFilePath();
+        } else throw new IOException("File not found");
+
+
         return Files.readAllBytes(new File(filePath).toPath());
     }
 

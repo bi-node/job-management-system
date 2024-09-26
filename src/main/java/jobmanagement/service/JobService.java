@@ -80,9 +80,6 @@ public class JobService {
         return jobRepository.save(job);
     }
 
-   public Page<Job> findJobByTitleContaining(String title, Pageable pageable) {
-       return jobRepository.findAllByTitleContainingIgnoreCase(title,pageable);
-   }
 
    public Page<Job> findAllJobPage(Pageable pageable) {
         return jobRepository.findAll(pageable);

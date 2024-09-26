@@ -57,15 +57,6 @@ public class JobController {
         jobService.deleteJob(id);
     }
 
-    @GetMapping("/jobs-page-name")
-    public ResponseEntity<?> getJobsByName(@RequestParam String title,
-            @RequestParam(defaultValue = "0") int page,
-                                           @RequestParam (defaultValue = "10") int size) {
-        Pageable pageable=PageRequest.of(page, size);
-        Page<Job> jobsPage=jobService.findJobByTitleContaining(title,pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(jobsPage);
-    }
-
     @GetMapping("/jobs-page")
     public ResponseEntity<?> getJobsPage( @RequestParam(defaultValue = "0") int page,
                                           @RequestParam (defaultValue = "10") int size) {
