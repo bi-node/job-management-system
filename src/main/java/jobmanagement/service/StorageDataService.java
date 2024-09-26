@@ -20,20 +20,15 @@ public class StorageDataService {
     @Autowired
     private StorageDataRepository storageDataRepository;
 
-//    private final String FOLDER_PATH="/Users/javatechie/Desktop/MyFIles/";
 
-    private final String FOLDER_PATH = "E:/MyFiles/";
-
-
-
-    public StorageData uploadFile(MultipartFile file) throws IOException {
+    public StorageData uploadFile(MultipartFile file, String folderPath) throws IOException {
         // Check if the file is empty
         if (file.isEmpty()) {
             throw new IOException("File is empty");
         }
 
         // Build file path and save the file
-        String filePath = FOLDER_PATH + file.getOriginalFilename();
+        String filePath = folderPath + file.getOriginalFilename();
         file.transferTo(new File(filePath));
 
         // Create StorageData object and save it

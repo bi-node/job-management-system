@@ -24,14 +24,14 @@ public class JobController {
     @PostMapping("/add-job")
     public ResponseEntity<?> addJob(
             @RequestParam("job") String jobJson,  // JSON string for Job
-            @RequestParam("jdfile") MultipartFile jdFile // File upload
+            @RequestParam("file") MultipartFile file // File upload
     ) throws IOException {
         // Convert the JSON string to a Job object
         ObjectMapper objectMapper = new ObjectMapper();
         Job job = objectMapper.readValue(jobJson, Job.class);
 
         // Save the job and file
-        Job newJob = jobService.saveJob(job, jdFile);
+        Job newJob = jobService.saveJob(job, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(newJob);
     }
 

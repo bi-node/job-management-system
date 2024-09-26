@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
-import java.util.List;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,9 +15,8 @@ public class JobApplication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @OneToOne
-    @JoinColumn(name = "job_id")
-    private Job job;
+
+    private int jobId;
 
     @Temporal(TemporalType.DATE)
     private LocalDate jobApplicationDate;
@@ -27,12 +25,15 @@ public class JobApplication {
     private LocalDate interviewDate;
 
     @OneToOne
+    @JoinColumn(name="resume_id")
     private StorageData resume;
 
     @OneToOne
+    @JoinColumn(name="cover_letter_id")
     private StorageData coverLetter;
 
     @OneToOne
+    @JoinColumn(name="other_document_id")
     private StorageData otherDocument;
 
 }

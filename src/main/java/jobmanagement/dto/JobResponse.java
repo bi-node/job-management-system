@@ -1,4 +1,4 @@
-package jobmanagement.entity;
+package jobmanagement.dto;
 
 
 import lombok.Builder;

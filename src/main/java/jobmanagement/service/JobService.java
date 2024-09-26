@@ -1,9 +1,8 @@
 package jobmanagement.service;
 
-import jakarta.transaction.Transactional;
-import jobmanagement.adapters.JobAdapter;
+import jobmanagement.adapters.Adaptor;
 import jobmanagement.entity.Job;
-import jobmanagement.entity.JobResponse;
+import jobmanagement.dto.JobResponse;
 import jobmanagement.entity.StorageData;
 import jobmanagement.repository.JobRepository;
 import jobmanagement.repository.StorageDataRepository;
@@ -32,6 +31,8 @@ public class JobService {
     @Autowired
     private StorageDataService storageDataService;
 
+    private final String FOLDER_PATH="E:/Job Mission/MyFileSystem/jds/";
+
 
 
     public List<JobResponse> findAll() throws IOException {
@@ -39,7 +40,7 @@ public class JobService {
         List<JobResponse> jobResponses=new ArrayList<>();
 
         for(Job job:jobs){
-            jobResponses.add(JobAdapter.JobToJobResponse(job));
+            jobResponses.add(Adaptor.JobToJobResponse(job));
         }
         return jobResponses;
 
@@ -55,7 +56,7 @@ public class JobService {
 
     public Job saveJob(Job job, MultipartFile file) throws IOException {
         // Handle the file upload and retrieve the storage data
-        StorageData storageData = storageDataService.uploadFile(file);
+        StorageData storageData = storageDataService.uploadFile(file, FOLDER_PATH);
 
         // Associate the file information with the job
         job.setJobDescription(storageData);
