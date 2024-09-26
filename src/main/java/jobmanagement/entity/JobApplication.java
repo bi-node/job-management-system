@@ -32,7 +32,7 @@ public class JobApplication {
     @OneToOne
     private StorageData coverLetter;
 
-    @OneToMany
-    private List<StorageData> otherDocument;
+    @OneToOne
+    private StorageData otherDocument;
 
 }
