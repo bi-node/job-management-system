@@ -2,6 +2,7 @@ package jobmanagement.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jobmanagement.entity.Job;
+import jobmanagement.service.JobApplicationService;
 import jobmanagement.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,10 +17,14 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/jobs")
+@CrossOrigin(origins = "*")
 public class JobController {
 
     @Autowired
     private JobService jobService;
+
+    @Autowired
+    private JobApplicationService jobApplicationService;
 
     @PostMapping("/add-job")
     public ResponseEntity<?> addJob(
@@ -53,7 +58,8 @@ public class JobController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteJob(@PathVariable int id) {
+    public void deleteJob(@PathVariable int id) throws IOException {
+        jobApplicationService.deleteJobApplication(id);
         jobService.deleteJob(id);
     }
 

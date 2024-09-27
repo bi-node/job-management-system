@@ -72,4 +72,9 @@ public class JobApplicationService {
 
     }
 
+    public void deleteJobApplication(int jobId) throws IOException {
+        jobApplicationRepository.deleteById(jobId);
+
+    }
+
 }

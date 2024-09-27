@@ -15,6 +15,8 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/v1/jobApplications")
+//@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class JobApplicationController {
     @Autowired
     private JobApplicationService jobApplicationService;
