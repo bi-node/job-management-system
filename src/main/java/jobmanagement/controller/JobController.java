@@ -27,12 +27,12 @@ public class JobController {
     @PostMapping("/add-job")
     public ResponseEntity<?> addJob(
             @RequestParam("jobIdNo") String jobIdNo,
-            @RequestParam(value = "title") String title,
-            @RequestParam(value = "companyName") String companyName,
-            @RequestParam(value = "address") String address,
-            @RequestParam(value = "email") String email,
-            @RequestParam(value = "hiringManagerName") String hiringManagerName,
-            @RequestParam(value = "hiringManagerPhoneNumber") String hiringManagerPhoneNumber,
+            @RequestParam("title") String title,
+            @RequestParam("companyName") String companyName,
+            @RequestParam("address") String address,
+            @RequestParam("email") String email,
+            @RequestParam("hiringManagerName") String hiringManagerName,
+            @RequestParam("hiringManagerPhoneNumber") String hiringManagerPhoneNumber,
             @RequestParam(value = "applicationDate", required = false) LocalDate applicationDate,
             @RequestParam(value = "interviewDate", required = false) LocalDate interviewDate,
             @RequestParam(value = "jobDescription" ,required = false)MultipartFile jobDescription,
@@ -61,8 +61,28 @@ public class JobController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateJob(@RequestBody Job job) {
-        return ResponseEntity.status(HttpStatus.OK).body(jobService.update(job));
+    public ResponseEntity<?> updateJob(
+            @RequestParam("id") int id,
+            @RequestParam("jobIdNo") String jobIdNo,
+            @RequestParam("title") String title,
+            @RequestParam("companyName") String companyName,
+            @RequestParam("address") String address,
+            @RequestParam("email") String email,
+            @RequestParam("hiringManagerName") String hiringManagerName,
+            @RequestParam("hiringManagerPhoneNumber") String hiringManagerPhoneNumber,
+            @RequestParam(value = "applicationDate", required = false) LocalDate applicationDate,
+            @RequestParam(value = "interviewDate", required = false) LocalDate interviewDate,
+            @RequestParam(value = "jobDescription" ,required = false)MultipartFile jobDescription,
+            @RequestParam(value = "resume" ,required = false)MultipartFile resume,
+            @RequestParam(value = "coverLetter" ,required = false)MultipartFile coverLetter,
+            @RequestParam(value = "otherDocument" ,required = false)MultipartFile otherDocument
+
+    ) throws IOException {
+
+        Job updateJob = jobService.updateJob(id,jobIdNo,title,companyName,address,email,hiringManagerName
+                ,hiringManagerPhoneNumber,applicationDate,interviewDate,jobDescription,resume,
+                coverLetter,otherDocument);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updateJob);
     }
 
     @DeleteMapping("/{id}")

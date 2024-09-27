@@ -104,32 +104,100 @@ public class JobService {
         return jobRepository.save(job);
     }
 
+@Transactional
+    public void deleteJob(int id) throws IOException {
+        StorageData resume = findById(id).getResume();
+        StorageData jobd = findById(id).getJobDescription();
+        StorageData cover = findById(id).getCoverLetter();
+        StorageData other = findById(id).getOtherDocument();
 
-    public void deleteJob(int id) {
+        if(resume!=null){
+            storageDataService.deleteFile(resume);
+        }
+
+        if(jobd!=null){
+            storageDataService.deleteFile(jobd);
+        }
+        if(cover!=null){
+            storageDataService.deleteFile(cover);
+        }
+        if(other!=null){
+            storageDataService.deleteFile(other);
+        }
+
         jobRepository.deleteById(id);
     }
 
-    public Job update(Job job) {
-        Job updateJob=Job.builder().
-                jobIdNo(job.getJobIdNo())
-                .title(job.getTitle())
-                .address(job.getAddress())
-                .email(job.getEmail())
-                .companyName(job.getCompanyName())
-                .hiringManager(job.getHiringManager())
-                .hiringManagerPhoneNumber(job.getHiringManagerPhoneNumber())
-                .jobApplicationDate(job.getJobApplicationDate())
-                .interviewDate(job.getInterviewDate())
-                .jobDescription(job.getJobDescription())
-                .resume(job.getResume())
-                .coverLetter(job.getCoverLetter())
-                .otherDocument(job.getOtherDocument())
-                .build();
+    @Transactional
+    public Job updateJob(int id,
+                         String jobIdNo,
+                         String title,
+                         String companyName,
+                         String address,
+                         String email,
+                         String hiringManagerName,
+                         String hiringManagerPhoneNumber,
+                         LocalDate applicationDate,
+                         LocalDate interviewDate,
+                         MultipartFile jobDescription,
+                         MultipartFile resume,
+                         MultipartFile coverLetter,
+                         MultipartFile otherDocument) throws IOException {
+
+        Job job = jobRepository.findById(id).orElseThrow(() -> new RuntimeException("Job ID not found"));
+
+        job.setJobIdNo(jobIdNo);
+        job.setTitle(title);
+        job.setCompanyName(companyName);
+        job.setAddress(address);
+        job.setEmail(email);
+        job.setHiringManager(hiringManagerName);
+        job.setHiringManagerPhoneNumber(hiringManagerPhoneNumber);
+        job.setJobApplicationDate(applicationDate);
+        job.setInterviewDate(interviewDate);
+
+        if (jobDescription != null && !jobDescription.isEmpty()) {
+            // Remove old job description file
+            storageDataService.deleteFile(job.getJobDescription());
+
+            // Upload the new job description file
+            StorageData newJobDescription = storageDataService.uploadFile(jobDescription, FOLDER_PATH);
+            job.setJobDescription(newJobDescription);
+        }
+
+        if (resume != null && !resume.isEmpty()) {
+            // Remove old resume file
+            storageDataService.deleteFile(job.getResume());
+
+            // Upload the new resume file
+            StorageData newResume = storageDataService.uploadFile(resume, RESUME_FOLDER_PATH);
+            job.setResume(newResume);
+        }
+
+        if (coverLetter != null && !coverLetter.isEmpty()) {
+            // Remove old cover letter file
+            storageDataService.deleteFile(job.getCoverLetter());
+
+            // Upload the new cover letter file
+            StorageData newCoverLetter = storageDataService.uploadFile(coverLetter, CL_FOLDER_PATH);
+            job.setCoverLetter(newCoverLetter);
+        }
+
+        if (otherDocument != null && !otherDocument.isEmpty()) {
+            // Remove old other document file
+            storageDataService.deleteFile(job.getOtherDocument());
+
+            // Upload the new other document file
+            StorageData newOtherDocument = storageDataService.uploadFile(otherDocument, OTHER_FOLDER_PATH);
+            job.setOtherDocument(newOtherDocument);
+        }
+
         return jobRepository.save(job);
     }
 
 
-   public Page<Job> findAllJobPage(Pageable pageable) {
+
+    public Page<Job> findAllJobPage(Pageable pageable) {
         return jobRepository.findAll(pageable);
    }
 

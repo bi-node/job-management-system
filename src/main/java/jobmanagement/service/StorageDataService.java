@@ -64,4 +64,21 @@ public class StorageDataService {
         return storageDataRepository.findById(id).orElseThrow();
     }
 
+    public void deleteFile(StorageData storageData) throws IOException {
+        if (storageData != null) {
+            // Delete the file from the file system
+            File file = new File(storageData.getFilePath());
+            if (file.exists()) {
+                if (!file.delete()) {
+                    throw new IOException("Failed to delete the file: " + file.getAbsolutePath());
+                }
+            }
+
+            // Delete the record from the database
+            storageDataRepository.delete(storageData);
+        }
+    }
+
+
+
 }

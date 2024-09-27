@@ -23,7 +23,6 @@ public class Job {
 
     private String title;
 
-    @NotNull
     private String companyName;
 
     private String address;
