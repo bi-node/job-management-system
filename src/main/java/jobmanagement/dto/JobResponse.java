@@ -4,6 +4,8 @@ package jobmanagement.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 public class JobResponse {
@@ -16,4 +18,10 @@ public class JobResponse {
     private String hiringManager;
     private String hiringManagerPhoneNumber;
     private int jobDescriptionFileId;
+    private LocalDate jobApplicationDate;
+    private LocalDate interviewDate;
+    private int resumeId;
+    private int coverLetterId;
+    private int otherDocumentId;
+
 }

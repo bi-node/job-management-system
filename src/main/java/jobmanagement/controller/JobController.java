@@ -2,7 +2,6 @@ package jobmanagement.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jobmanagement.entity.Job;
-import jobmanagement.service.JobApplicationService;
 import jobmanagement.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/v1/jobs")
@@ -23,20 +23,28 @@ public class JobController {
     @Autowired
     private JobService jobService;
 
-    @Autowired
-    private JobApplicationService jobApplicationService;
 
     @PostMapping("/add-job")
     public ResponseEntity<?> addJob(
-            @RequestParam("job") String jobJson,  // JSON string for Job
-            @RequestParam("file") MultipartFile file // File upload
-    ) throws IOException {
-        // Convert the JSON string to a Job object
-        ObjectMapper objectMapper = new ObjectMapper();
-        Job job = objectMapper.readValue(jobJson, Job.class);
+            @RequestParam("jobIdNo") String jobIdNo,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "companyName") String companyName,
+            @RequestParam(value = "address") String address,
+            @RequestParam(value = "email") String email,
+            @RequestParam(value = "hiringManagerName") String hiringManagerName,
+            @RequestParam(value = "hiringManagerPhoneNumber") String hiringManagerPhoneNumber,
+            @RequestParam(value = "applicationDate", required = false) LocalDate applicationDate,
+            @RequestParam(value = "interviewDate", required = false) LocalDate interviewDate,
+            @RequestParam(value = "jobDescription" ,required = false)MultipartFile jobDescription,
+            @RequestParam(value = "resume" ,required = false)MultipartFile resume,
+            @RequestParam(value = "coverLetter" ,required = false)MultipartFile coverLetter,
+            @RequestParam(value = "otherDocument" ,required = false)MultipartFile otherDocument
 
-        // Save the job and file
-        Job newJob = jobService.saveJob(job, file);
+    ) throws IOException {
+
+        Job newJob = jobService.saveJob(jobIdNo,title,companyName,address,email,hiringManagerName
+                ,hiringManagerPhoneNumber,applicationDate,interviewDate,jobDescription,resume,
+                coverLetter,otherDocument);
         return ResponseEntity.status(HttpStatus.CREATED).body(newJob);
     }
 
@@ -59,7 +67,6 @@ public class JobController {
 
     @DeleteMapping("/{id}")
     public void deleteJob(@PathVariable int id) throws IOException {
-        jobApplicationService.deleteJobApplication(id);
         jobService.deleteJob(id);
     }
 

@@ -1,9 +1,7 @@
 package jobmanagement.adapters;
 
-import jobmanagement.dto.JobApplicationResponse;
 import jobmanagement.entity.Job;
 import jobmanagement.dto.JobResponse;
-import jobmanagement.entity.JobApplication;
 
 
 import java.io.IOException;
@@ -23,24 +21,16 @@ public  class Adaptor {
                 .hiringManagerPhoneNumber(job.getHiringManagerPhoneNumber())
                 .address(job.getAddress())
                 .jobDescriptionFileId(job.getJobDescription().getId())
+                .jobApplicationDate(job.getJobApplicationDate())
+                .interviewDate(job.getInterviewDate())
+                .resumeId(job.getResume()!=null?job.getResume().getId():-1)
+                .coverLetterId(job.getCoverLetter()!=null?job.getCoverLetter().getId():-1)
+                .otherDocumentId(job.getOtherDocument()!=null?job.getOtherDocument().getId():-1)
                 .build();
         return jobResponse;
 
     }
 
-    public static JobApplicationResponse JobAppToJobApplicationResponse(JobApplication jobApplication) throws IOException {
-        JobApplicationResponse jobApplicationResponse;
-        jobApplicationResponse= JobApplicationResponse.builder()
-                .id(jobApplication.getId())
-                .jobId(jobApplication.getJobId())
-                .jobApplicationDate(jobApplication.getJobApplicationDate())
-                .interviewDate(jobApplication.getInterviewDate())
-                .resumeId(jobApplication.getResume()!=null?jobApplication.getResume().getId():-1)
-                .coverLetterId(jobApplication.getCoverLetter()!=null?jobApplication.getCoverLetter().getId():-1)
-                .otherDocumentId(jobApplication.getOtherDocument()!=null?jobApplication.getOtherDocument().getId():-1)
-        .build();
-        return jobApplicationResponse;
-    }
 
 
 }

@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Builder
 @AllArgsConstructor
@@ -33,4 +35,24 @@ public class Job {
     private String email;
     private String hiringManager;
     private String hiringManagerPhoneNumber;
+
+    @Temporal(TemporalType.DATE)
+    private LocalDate jobApplicationDate;
+
+    @Temporal(TemporalType.DATE)
+    private LocalDate interviewDate;
+
+    @OneToOne
+    @JoinColumn(name="resume_id")
+    private StorageData resume;
+
+    @OneToOne
+    @JoinColumn(name="cover_letter_id")
+    private StorageData coverLetter;
+
+    @OneToOne
+    @JoinColumn(name="other_document_id")
+    private StorageData otherDocument;
+
+
 }
